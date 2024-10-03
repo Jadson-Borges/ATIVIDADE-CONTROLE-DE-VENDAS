@@ -9,7 +9,7 @@ def carregar_dados(nome_arquivo):
     except FileNotFoundError:
         return []
 
-# Função para salvar dados em um arquivo CSV
+# Função para salvar dados em um arquivo CS1V
 def salvar_dados(dados, nome_arquivo):
     df = pd.DataFrame(dados)
     df.to_csv(nome_arquivo, index=False)
