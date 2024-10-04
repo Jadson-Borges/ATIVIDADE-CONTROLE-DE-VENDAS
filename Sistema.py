@@ -9,25 +9,50 @@ def carregar_dados(nome_arquivo):
     except FileNotFoundError:
         return []
 
-# Função para salvar dados em um arquivo CS1V
+# Função para salvar dados em um arquivo CSV
 def salvar_dados(dados, nome_arquivo):
     df = pd.DataFrame(dados)
     df.to_csv(nome_arquivo, index=False)
 
+
+# Função para consultar o estoque
+def consultar_estoque(produtos):
+    if not produtos:
+        print("Não há produtos cadastrados.")
+    else:
+        print("\nProdutos em Estoque:")
+        for produto in produtos:
+            valor_estoque = produto['quantidade'] * produto['preco']
+            print(f"Código: {produto['codigo']}, Nome: {produto['nome']}, Quantidade: {produto['quantidade']}, Valor em Estoque: R$ {valor_estoque:.2f}")
+
+# Conjunto para armazenar códigos únicos
+codigos_cadastrados = set()
+
 # Inicialização
 produtos = carregar_dados('produtos.csv')
 vendas = carregar_dados('vendas.csv')
+
+# Preencher o conjunto com os códigos já existentes
+for produto in produtos:
+    codigos_cadastrados.add(produto['codigo'])
 
 while True:
     print("1. Cadastrar Produto")
     print("2. Registrar Venda")
     print("3. Gerar Relatório de Vendas")
     print("4. Gerar Relatório de Estoque")
-    print("5. Sair")
+    print("5. Consultar Estoque")  # Nova opção
+    print("6. Sair")
     opcao = int(input("Escolha uma opção: "))
 
     if opcao == 1:
         codigo = input("Código do produto: ")
+        # Verifica se o código já existe
+        while codigo in codigos_cadastrados:
+            print("Código já cadastrado. Informe um novo código:")
+            codigo = input("Código do produto: ")
+        # Se o código for novo, adiciona ao conjunto e à lista de produtos
+        codigos_cadastrados.add(codigo)
         nome = input("Nome do produto: ")
         quantidade = int(input("Quantidade em estoque: "))
         preco = float(input("Preço por unidade: "))
@@ -66,8 +91,11 @@ while True:
                 arquivo.write(
                     f"Código: {produto['codigo']}, Nome: {produto['nome']}, Quantidade: {produto['quantidade']}\n")
         print(f"Relatório de estoque gerado com sucesso em {nome_arquivo}!")
+
     elif opcao == 5:
+        consultar_estoque(produtos)
+
+    elif opcao == 6:
         break
     else:
         print("Opção inválida.")
-
