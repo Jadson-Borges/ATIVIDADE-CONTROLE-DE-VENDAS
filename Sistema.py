@@ -14,7 +14,7 @@ def salvar_dados(dados, nome_arquivo):
     df = pd.DataFrame(dados)
     df.to_csv(nome_arquivo, index=False)
 
-
+#teste
 # Função para consultar o estoque
 def consultar_estoque(produtos):
     if not produtos:
